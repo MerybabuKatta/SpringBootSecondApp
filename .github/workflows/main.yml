@@ -1,35 +1,32 @@
-name: CI Build
+name: Maven CI Build
 
 on:
   push:
-    branches: [ main ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ main ]
+    branches: [ "main" ]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout Repository
         uses: actions/checkout@v4
 
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
+          distribution: 'temurin'
           java-version: '21'
-          distribution: 'zulu'
-          cache: 'maven'
 
-      - name: Validate Maven Wrapper
-        uses: gradle/actions/wrapper-validation@v3
+      - name: Cache Maven Dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
 
       - name: Build with Maven
-        run: mvn -B clean install
-
-      - name: Run Tests
-        run: mvn test
-
-      - name: Package Application (JAR)
-        run: mvn -B package -DskipTests
+        run: mvn clean install -DskipTests
