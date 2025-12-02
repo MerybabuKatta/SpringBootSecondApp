@@ -2,16 +2,18 @@ package com.airline.booking.controller;
 
 import com.airline.booking.entity.Booking;
 import com.airline.booking.service.BookingService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/bookings")
-@RequiredArgsConstructor
 public class BookingController {
     
     private final BookingService bookingService;
+
+    public BookingController(BookingService bookingService) {
+        this.bookingService = bookingService;
+    }
     
     @PostMapping
     public Booking createBooking(@RequestBody BookingRequest request) {
@@ -44,7 +46,6 @@ public class BookingController {
         private String passengerEmail;
         private Integer seats;
         
-        // Getters and setters
         public Long getFlightId() { return flightId; }
         public void setFlightId(Long flightId) { this.flightId = flightId; }
         public String getPassengerName() { return passengerName; }
