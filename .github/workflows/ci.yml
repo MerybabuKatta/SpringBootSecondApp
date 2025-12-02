@@ -8,7 +8,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -22,9 +21,6 @@ jobs:
           distribution: 'temurin'
           cache: 'maven'
 
-      - name: Validate Maven Wrapper
-        uses: gradle/actions/wrapper-validation@v3
-
       - name: Build with Maven
         run: mvn -B clean install
 
@@ -33,4 +29,3 @@ jobs:
 
       - name: Package Application (JAR)
         run: mvn -B package -DskipTests
-
